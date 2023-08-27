@@ -13,10 +13,12 @@ struct ContentView: View {
     @State private var numberChoice = 2
     
     @State private var questions = [""]
-    @State private var questionState = [""]
+    @State private var questionState = ""
     @State private var questionNumber = 2
     
     @State private var endGameAlert = false
+    
+    @State private var gamePoints = 0
     
     var body: some View {
         NavigationStack {
@@ -30,14 +32,15 @@ struct ContentView: View {
                 }
             }.navigationTitle("Select your multipication table")
                 .padding()
+            VStack {
             if startGame == true {
-                VStack {
                     VStack {
                         Text("What is \(questions[0])")
                         VStack {
                             TextField("Give your answer",
-                                      text: $questionState[0]).textFieldStyle(.roundedBorder)
+                                      text: $questionState).textFieldStyle(.roundedBorder)
                             Button("Submit Answer") {
+                                validateAnswer()
                                 nextQuestion()
                             }
                         }
@@ -48,14 +51,14 @@ struct ContentView: View {
                             }
                         }
                 }
-            }
+            }.padding()
         }
     }
     
     func startGameNow() {
         startGame = true
         print("Game Started")
-        questions = ["\(numberChoice) * \(questionNumber)"]
+        questions = ["\(numberChoice) x \(questionNumber)"]
         print(questions)
     }
     
@@ -63,11 +66,23 @@ struct ContentView: View {
         if startGame == true {
             // function to move to next question in questions array
             questionNumber += 1
-            questions = ["\(numberChoice) * \(questionNumber)"]
+            questionState = ""
+            questions = ["\(numberChoice) x \(questionNumber)"]
             print("\(questionNumber)")
         }
         if questionNumber == 12 {
             endGameAlert = true
+        }
+    }
+    
+    func validateAnswer() {
+        var playerAnswer = Int(questionState)
+        var validAnswer = numberChoice * questionNumber
+        
+        if validAnswer == playerAnswer {
+            gamePoints += 1
+            print("Game Points: \(gamePoints)")
+            print("Winner")
         }
     }
     
@@ -77,7 +92,7 @@ struct ContentView: View {
         numberChoice = 2
         
         questions = [""]
-        questionState = [""]
+        questionState = ""
         questionNumber = 2
         
         endGameAlert = false
