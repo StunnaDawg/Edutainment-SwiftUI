@@ -21,29 +21,33 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Stepper("\(numberChoice)", value: $numberChoice, in: 2...12) {_ in
-                }.padding()
-                Button("Start Game") {
-                    startGameNow()
+                if startGame == false {
+                    Stepper("\(numberChoice)", value: $numberChoice, in: 2...12) {_ in
+                    }.padding()
+                    Button("Start Game") {
+                        startGameNow()
+                    }
                 }
             }.navigationTitle("Select your multipication table")
                 .padding()
-            VStack {
+            if startGame == true {
                 VStack {
-                    Text("What is \(questions[0])")
                     VStack {
-                        TextField("Give your answer",
-                                  text: $questionState[0]).textFieldStyle(.roundedBorder)
-                        Button("Submit Answer") {
-                            nextQuestion()
+                        Text("What is \(questions[0])")
+                        VStack {
+                            TextField("Give your answer",
+                                      text: $questionState[0]).textFieldStyle(.roundedBorder)
+                            Button("Submit Answer") {
+                                nextQuestion()
+                            }
                         }
-                    }
-                }.frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .alert("Game Done", isPresented: $endGameAlert) {
-                        Button("Game Finish") {
-                            resetGame()
+                    }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .alert("Game Done", isPresented: $endGameAlert) {
+                            Button("Game Finish") {
+                                resetGame()
+                            }
                         }
-                    }
+                }
             }
         }
     }
